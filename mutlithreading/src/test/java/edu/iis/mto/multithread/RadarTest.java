@@ -26,4 +26,23 @@ class RadarTest {
         verify(batteryMock, times(rocketCounter)).launchPatriot(enemyMissile);
     }
 
+    @RepeatedTest(100)
+    void launchPatriotOnceWhenNoticesTwoScudMissiles() {
+        int rocketCounter = 2;
+        Executor executor = Runnable::run;
+        BetterRadar radar = new BetterRadar(executor,rocketCounter, batteryMock);
+        Scud enemyMissile = new Scud();
+        radar.onNotice(enemyMissile);
+        verify(batteryMock, times(rocketCounter)).launchPatriot(enemyMissile);
+    }
+
+    @RepeatedTest(100)
+    void launchPatriotOnceWhenNoticesThirteenScudMissile() {
+        int rocketCounter = 13;
+        Executor executor = Runnable::run;
+        BetterRadar radar = new BetterRadar(executor,rocketCounter, batteryMock);
+        Scud enemyMissile = new Scud();
+        radar.onNotice(enemyMissile);
+        verify(batteryMock, times(rocketCounter)).launchPatriot(enemyMissile);
+    }
 }
