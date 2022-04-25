@@ -1,11 +1,15 @@
 package edu.iis.mto.multithread;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.concurrent.Executor;
 
 @ExtendWith(MockitoExtension.class)
 class RadarTest {
@@ -13,12 +17,23 @@ class RadarTest {
     @Mock
     private PatriotBattery batteryMock;
 
-    @Test
+    @RepeatedTest(50)
     void launchPatriotOnceWhenNoticesAScudMissle() {
-        Radar radar = new Radar(batteryMock);
+        int rocketCount=1;
+        Executor executor = Runnable::run;
+        BetterRadar betterRadar = new BetterRadar(rocketCount,batteryMock,executor);
         Scud enemyMissle = new Scud();
-        radar.notice(enemyMissle);
-        verify(batteryMock).launchPatriot(enemyMissle);
+        betterRadar.notice(enemyMissle);
+        verify(batteryMock,times(rocketCount)).launchPatriot(enemyMissle);
+    }
+    @RepeatedTest(50)
+    void launchPatriotTenTimesWhenNoticesAScudMissle() {
+        int rocketCount=10;
+        Executor executor = Runnable::run;
+        BetterRadar betterRadar = new BetterRadar(rocketCount,batteryMock,executor);
+        Scud enemyMissle = new Scud();
+        betterRadar.notice(enemyMissle);
+        verify(batteryMock,times(rocketCount)).launchPatriot(enemyMissle);
     }
 
 }
